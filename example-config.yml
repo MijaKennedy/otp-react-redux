@@ -1,7 +1,10 @@
 api:
-  host: http://localhost
+  host: https://api.u-ride.app
   path: /otp/routers/default
-  port: 8001
+  port: 
+  v2: false 
+branding: uride_logo
+title: "U-RIDE"
 
 # Support OTP-2 in parallel for certain requests
 # api_v2:
@@ -90,8 +93,8 @@ persistence:
 #        href: ''
 
 map:
-  initLat: 45.52
-  initLon: -122.682
+  initLat: 26.31
+  initLon: -80.05
   baseLayers:
     - name: Streets
       url: //cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png
@@ -133,16 +136,16 @@ map:
 
 # example config for a Pelias geocoder (https://pelias.io/)
 geocoder:
-  apiKey: MAPZEN_KEY
+  apiKey: ge-6c944d3d7d1c28a9
   boundary:
     rect:
-      minLon: -123.2034
-      maxLon: -122.135
-      minLat: 45.273
-      maxLat: 45.7445
+      minLon: -81.82
+      maxLon: -79.9
+      minLat: 24.51
+      maxLat: 27.2
   focusPoint:
-    lat: 45.5223452
-    lon: -122.6821804
+    lat: 24.51
+    lon: -79.9
   # Custom fetch options to pass to geocoder resource.
   # options:
   #   headers:
@@ -151,7 +154,7 @@ geocoder:
   type: PELIAS
   # This base URL is required as the libraries will default to using now-defunct
   # mapzen urls
-  baseUrl: https://geocoder.example.com/pelias/v1
+  baseUrl: https://api.geocode.earth/v1
   # This allows the location field dropdown headers to be colored based on Pelias layer
   #resultsColors:
   #  stops: "#007fae"
@@ -244,6 +247,7 @@ modes:
 routingTypes:
   - key: ITINERARY
     text: Exact Time
+    
 
 # Itinerary options
 itinerary:
@@ -253,6 +257,7 @@ itinerary:
   # Whether the plan first/previous/next/last buttons should be shown along with
   # plan trip itineraries.
   showPlanFirstLastButtons: false
+  
   # If multiple fares are returned by OTP, assign names to the fare keys here
   #fareKeyNameMap:
   #  regular: "Transit Fare"
