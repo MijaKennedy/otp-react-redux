@@ -63,6 +63,7 @@
     "d3-zoom": "^1.7.1",
     "flat": "^5.0.2",
     "font-awesome": "^4.7.0",
+    "fontawesome": "^5.6.3",
     "formik": "^2.1.5",
     "formik-error-focus": "^1.1.0",
     "gtfs-realtime-bindings": "^0.0.6",
