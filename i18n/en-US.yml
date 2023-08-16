@@ -665,7 +665,7 @@ otpUi:
     title: Trip Details
     tncFare: "{companies} Fare: <strong>{minTNCFare} - {maxTNCFare}</strong>"
     transitFare: Transit Fare
-    transitFareEntry: "{name}: <strong>{value}</strong>"
+    transitFareEntry: "{name}: <strong>USD</strong>"
     tripIncludesFlex: This trip includes flexible routes.
 
 # Common messages that appear in multiple components and modules
