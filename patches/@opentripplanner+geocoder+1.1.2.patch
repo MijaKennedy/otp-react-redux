@@ -1,0 +1,27 @@
+diff --git a/node_modules/@opentripplanner/geocoder/esm/index.js b/node_modules/@opentripplanner/geocoder/esm/index.js
+index e1eaa87..78888cc 100644
+--- a/node_modules/@opentripplanner/geocoder/esm/index.js
++++ b/node_modules/@opentripplanner/geocoder/esm/index.js
+@@ -1,10 +1,11 @@
+ import * as arcgis from "@conveyal/geocoder-arcgis-geojson";
+ import * as pelias from "isomorphic-mapzen-search";
++// import * as google from "../../../@googlemaps";
+ import memoize from "lodash.memoize";
+ import ArcGISGeocoder from "./geocoders/arcgis";
+ import NoApiGeocoder from "./geocoders/noapi";
+ import PeliasGeocoder from "./geocoders/pelias"; // Create a memoized getter to avoid recreating new geocoders each time.
+-
++// import GoogleGeocoder from "./geocoders/google";
+ var getGeocoder = memoize(function (geocoderConfig) {
+   if (!geocoderConfig || !geocoderConfig.type) {
+     return new NoApiGeocoder();
+@@ -18,7 +19,8 @@ var getGeocoder = memoize(function (geocoderConfig) {
+ 
+     case "PELIAS":
+       return new PeliasGeocoder(pelias, geocoderConfig);
+-
++    // case "GOOGLE": 
++    //   return new GoogleGeocoder(google, geocoderConfig);
+     default:
+       console.error("Unkown geocoder type: \"".concat(type, "\". Using NoApiGeocoder."));
+       return new NoApiGeocoder();

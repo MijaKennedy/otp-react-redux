@@ -1,0 +1,98 @@
+diff --git a/node_modules/@opentripplanner/trip-details/esm/index.js b/node_modules/@opentripplanner/trip-details/esm/index.js
+index 0d5d48b..85a910d 100644
+--- a/node_modules/@opentripplanner/trip-details/esm/index.js
++++ b/node_modules/@opentripplanner/trip-details/esm/index.js
+@@ -245,20 +245,10 @@ export function TripDetails(_ref3) {
+         strong: boldText
+       }
+     }))
+-  }), fare && /*#__PURE__*/React.createElement(TripDetail // Any custom description for the transit fare needs to be handled by the slot.
+-  , {
+-    description: FareDetails && /*#__PURE__*/React.createElement(FareDetails, {
+-      maxTNCFare: maxTNCFare,
+-      minTNCFare: minTNCFare,
+-      transitFares: transitFares
+-    }),
+-    icon: /*#__PURE__*/React.createElement(MoneyBillAlt, {
+-      size: 17
+-    }),
+-    summary: fare
+   }), caloriesBurned > 0 && /*#__PURE__*/React.createElement(TripDetail, {
+     icon: /*#__PURE__*/React.createElement(Heartbeat, {
+-      size: 17
++      size: 17,
++      color:'#D0312D'
+     }),
+     summary: /*#__PURE__*/React.createElement(S.CaloriesSummary, null, /*#__PURE__*/React.createElement(FormattedMessage, {
+       defaultMessage: defaultMessages["otpUi.TripDetails.calories"],
+diff --git a/node_modules/@opentripplanner/trip-details/lib/index.js b/node_modules/@opentripplanner/trip-details/lib/index.js
+index f32d598..b398252 100644
+--- a/node_modules/@opentripplanner/trip-details/lib/index.js
++++ b/node_modules/@opentripplanner/trip-details/lib/index.js
+@@ -107,7 +107,6 @@ function getFlexMessageValues(info) {
+  * slot in the TripDetails component.
+  */
+ 
+-
+ function DefaultCaloriesDetails({
+   bikeSeconds,
+   calories,
+@@ -126,6 +125,27 @@ function DefaultCaloriesDetails({
+     }
+   });
+ }
++
++
++
++/**
++ * Default rendering if no component is provided for the EmissionsDetails
++ * slot in the TripDetails component.
++ */
++
++function DefaultEmissionsDetails({
++  emissions
++}) {
++  return /*#__PURE__*/_react.default.createElement(_reactIntl.FormattedMessage, {
++    defaultMessage: defaultMessages["otpUi.TripDetails.caloriesDescription"],
++    description: "Text describing how the calories relate to the walking and biking duration of a trip.",
++    id: "otpUi.TripDetails.emissionsDescription",
++    values: {
++      emissions: Math.round(emissions),
++      strong: boldText
++    }
++  });
++}
+ /**
+  * Helper component that renders a transit fare entry.
+  */
+@@ -156,6 +176,7 @@ const TransitFare = ({
+ 
+ function TripDetails({
+   CaloriesDetails = DefaultCaloriesDetails,
++  EmissionsDetails = DefaultEmissionsDetails,
+   className = "",
+   DepartureDetails = null,
+   defaultFareKey = "regular",
+@@ -267,20 +288,10 @@ function TripDetails({
+         strong: boldText
+       }
+     }))
+-  }), fare && /*#__PURE__*/_react.default.createElement(_tripDetail.default // Any custom description for the transit fare needs to be handled by the slot.
+-  , {
+-    description: FareDetails && /*#__PURE__*/_react.default.createElement(FareDetails, {
+-      maxTNCFare: maxTNCFare,
+-      minTNCFare: minTNCFare,
+-      transitFares: transitFares
+-    }),
+-    icon: /*#__PURE__*/_react.default.createElement(_MoneyBillAlt.MoneyBillAlt, {
+-      size: 17
+-    }),
+-    summary: fare
+   }), caloriesBurned > 0 && /*#__PURE__*/_react.default.createElement(_tripDetail.default, {
+     icon: /*#__PURE__*/_react.default.createElement(_Heartbeat.Heartbeat, {
+-      size: 17
++      size: 17,
++      color: '#D0312D'
+     }),
+     summary: /*#__PURE__*/_react.default.createElement(S.CaloriesSummary, null, /*#__PURE__*/_react.default.createElement(_reactIntl.FormattedMessage, {
+       defaultMessage: defaultMessages["otpUi.TripDetails.calories"],
