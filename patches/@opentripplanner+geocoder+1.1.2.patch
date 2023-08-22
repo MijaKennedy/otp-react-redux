@@ -1,17 +1,139 @@
+diff --git a/node_modules/@opentripplanner/geocoder/esm/geocoders/google.js b/node_modules/@opentripplanner/geocoder/esm/geocoders/google.js
+new file mode 100644
+index 0000000..cfc0b6b
+--- /dev/null
++++ b/node_modules/@opentripplanner/geocoder/esm/geocoders/google.js
+@@ -0,0 +1,115 @@
++import _defineProperty from "@babel/runtime/helpers/defineProperty";
++import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
++import _createClass from "@babel/runtime/helpers/createClass";
++import _inherits from "@babel/runtime/helpers/inherits";
++import _possibleConstructorReturn from "@babel/runtime/helpers/possibleConstructorReturn";
++import _getPrototypeOf from "@babel/runtime/helpers/getPrototypeOf";
++
++function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
++
++function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
++
++function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
++
++function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
++
++import Geocoder from "./abstract-geocoder";
++/**
++ * Geocoder implementation for the Pelias geocoder.
++ * See https://pelias.io
++ *
++ * @extends Geocoder
++ */
++
++var GoogleGeocoder = /*#__PURE__*/function (_Geocoder) {
++  _inherits(GoogleGeocoder, _Geocoder);
++
++  var _super = _createSuper(GoogleGeocoder);
++
++  function GoogleGeocoder() {
++    _classCallCheck(this, GoogleGeocoder);
++
++    return _super.apply(this, arguments);
++  }
++
++  _createClass(GoogleGeocoder, [{
++    key: "getAutocompleteQuery",
++    value:
++    /**
++     * Generate an autocomplete query specifically for the Google API. The
++     * `sources` parameter is a Google-specific option.
++     */
++    function getAutocompleteQuery(query) {
++      var _this$geocoderConfig = this.geocoderConfig,
++          apiKey = _this$geocoderConfig.apiKey,
++          baseUrl = _this$geocoderConfig.baseUrl,
++          boundary = _this$geocoderConfig.boundary,
++          focusPoint = _this$geocoderConfig.focusPoint,
++          options = _this$geocoderConfig.options,
++          sources = _this$geocoderConfig.sources;
++      return _objectSpread({
++        apiKey: apiKey,
++        boundary: boundary,
++        focusPoint: focusPoint,
++        options: options,
++        // explicitly send over null for sources if provided sources is not truthy
++        // in order to avoid default isomorphic-mapzen-search sources form being
++        // applied
++        sources: sources || null,
++        url: baseUrl ? "".concat(baseUrl, "/place/autocomplete/json") : undefined
++      }, query);
++    }
++    /**
++     * Generate a search query specifically for the Pelias API. The
++     * `sources` parameter is a Pelias-specific option.
++     */
++
++  }, {
++    key: "getSearchQuery",
++    value: function getSearchQuery(query) {
++      var _this$geocoderConfig2 = this.geocoderConfig,
++          apiKey = _this$geocoderConfig2.apiKey,
++          baseUrl = _this$geocoderConfig2.baseUrl,
++          boundary = _this$geocoderConfig2.boundary,
++          focusPoint = _this$geocoderConfig2.focusPoint,
++          options = _this$geocoderConfig2.options,
++          sources = _this$geocoderConfig2.sources;
++      return _objectSpread({
++        apiKey: apiKey,
++        boundary: boundary,
++        focusPoint: focusPoint,
++        options: options,
++        // explicitly send over null for sources if provided sources is not truthy
++        // in order to avoid default isomorphic-mapzen-search sources form being
++        // applied
++        sources: sources || null,
++        url: baseUrl ? "".concat(baseUrl, "/geocode") : undefined,
++        format: false
++      }, query);
++    }
++    /**
++     * Rewrite the response into an application-specific data format using the
++     * first feature returned from the geocoder.
++     */
++
++  }, {
++    key: "rewriteReverseResponse",
++    value: function rewriteReverseResponse(response) {
++      var _response$isomorphicM = response.isomorphicMapzenSearchQuery.point,
++          lat = _response$isomorphicM.lat,
++          lon = _response$isomorphicM.lon;
++      var firstFeature = response[0];
++      return {
++        lat: lat,
++        lon: lon,
++        name: firstFeature.label,
++        rawGeocodedFeature: firstFeature
++      };
++    }
++  }]);
++
++  return GoogleGeocoder;
++}(Geocoder);
++
++export { GoogleGeocoder as default };
++//# sourceMappingURL=pelias.js.map
+\ No newline at end of file
 diff --git a/node_modules/@opentripplanner/geocoder/esm/index.js b/node_modules/@opentripplanner/geocoder/esm/index.js
-index e1eaa87..78888cc 100644
+index e1eaa87..b931648 100644
 --- a/node_modules/@opentripplanner/geocoder/esm/index.js
 +++ b/node_modules/@opentripplanner/geocoder/esm/index.js
 @@ -1,10 +1,11 @@
  import * as arcgis from "@conveyal/geocoder-arcgis-geojson";
  import * as pelias from "isomorphic-mapzen-search";
-+// import * as google from "../../../@googlemaps";
++import * as google from "@googlemaps/google-maps-services-js";
  import memoize from "lodash.memoize";
  import ArcGISGeocoder from "./geocoders/arcgis";
  import NoApiGeocoder from "./geocoders/noapi";
  import PeliasGeocoder from "./geocoders/pelias"; // Create a memoized getter to avoid recreating new geocoders each time.
 -
-+// import GoogleGeocoder from "./geocoders/google";
++import GoogleGeocoder from "./geocoders/google";
  var getGeocoder = memoize(function (geocoderConfig) {
    if (!geocoderConfig || !geocoderConfig.type) {
      return new NoApiGeocoder();
@@ -20,8 +142,108 @@ index e1eaa87..78888cc 100644
      case "PELIAS":
        return new PeliasGeocoder(pelias, geocoderConfig);
 -
-+    // case "GOOGLE": 
-+    //   return new GoogleGeocoder(google, geocoderConfig);
++    case "GOOGLE": 
++      return new GoogleGeocoder(google, geocoderConfig);
      default:
        console.error("Unkown geocoder type: \"".concat(type, "\". Using NoApiGeocoder."));
+       return new NoApiGeocoder();
+diff --git a/node_modules/@opentripplanner/geocoder/src/geocoders/google.js b/node_modules/@opentripplanner/geocoder/src/geocoders/google.js
+new file mode 100644
+index 0000000..3583174
+--- /dev/null
++++ b/node_modules/@opentripplanner/geocoder/src/geocoders/google.js
+@@ -0,0 +1,68 @@
++import Geocoder from "./abstract-geocoder";
++
++/**
++ * Geocoder implementation for the Pelias geocoder.
++ * See https://pelias.io
++ *
++ * @extends Geocoder
++ */
++export default class GoogleGeocoder extends Geocoder {
++  /**
++   * Generate an autocomplete query specifically for the Google API
++   */
++  getAutocompleteQuery(query) {
++    const {
++      apiKey,
++      baseUrl,
++      boundary,
++      focusPoint,
++      options
++    } = this.geocoderConfig;
++    return {
++      apiKey,
++      boundary,
++      focusPoint,
++      url: baseUrl ? `${baseUrl}/place/autocomplete/json` : undefined,
++      ...query
++    };
++  }
++
++  /**
++   * Generate a search query specifically for the Google API
++   */
++  getSearchQuery(query) {
++    const {
++      key,
++      baseUrl,
++      boundary,
++      focusPoint,
++      options,
++      sources
++    } = this.geocoderConfig;
++    return {
++      apiKey,
++      boundary,
++      focusPoint,
++      options,
++      url: baseUrl ? `json` ? 
++      format: false, // keep as returned GeoJSON,
++      ...query
++    };
++  }
++
++  /**
++   * Rewrite the response into an application-specific data format using the
++   * first feature returned from the geocoder.
++   */
++  rewriteReverseResponse(response) {
++    const { lat, lon } = response.isomorphicMapzenSearchQuery.point;
++
++    const firstFeature = response[0];
++    return {
++      lat,
++      lon,
++      name: firstFeature.label,
++      rawGeocodedFeature: firstFeature
++    };
++  }
++}
+diff --git a/node_modules/@opentripplanner/geocoder/src/index.js b/node_modules/@opentripplanner/geocoder/src/index.js
+index b7cdc53..b4445a5 100644
+--- a/node_modules/@opentripplanner/geocoder/src/index.js
++++ b/node_modules/@opentripplanner/geocoder/src/index.js
+@@ -1,10 +1,12 @@
+ import * as arcgis from "@conveyal/geocoder-arcgis-geojson";
+ import * as pelias from "isomorphic-mapzen-search";
++import * as google from "@googlemaps"
+ import memoize from "lodash.memoize";
+ 
+ import ArcGISGeocoder from "./geocoders/arcgis";
+ import NoApiGeocoder from "./geocoders/noapi";
+ import PeliasGeocoder from "./geocoders/pelias";
++import GoogleGeocoder from "@opentripplanner/geocoder/src/geocoders/google";
+ 
+ // Create a memoized getter to avoid recreating new geocoders each time.
+ const getGeocoder = memoize(geocoderConfig => {
+@@ -17,6 +19,8 @@ const getGeocoder = memoize(geocoderConfig => {
+       return new ArcGISGeocoder(arcgis, geocoderConfig);
+     case "PELIAS":
+       return new PeliasGeocoder(pelias, geocoderConfig);
++    case "GOOGLE":
++      return new GoogleGeocoder(google, geocoderConfig);
+     default:
+       console.error(`Unkown geocoder type: "${type}". Using NoApiGeocoder.`);
        return new NoApiGeocoder();
