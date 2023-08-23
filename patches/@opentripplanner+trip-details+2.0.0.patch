@@ -1,8 +1,122 @@
 diff --git a/node_modules/@opentripplanner/trip-details/esm/index.js b/node_modules/@opentripplanner/trip-details/esm/index.js
-index 0d5d48b..85a910d 100644
+index 0d5d48b..c13f53a 100644
 --- a/node_modules/@opentripplanner/trip-details/esm/index.js
 +++ b/node_modules/@opentripplanner/trip-details/esm/index.js
-@@ -245,20 +245,10 @@ export function TripDetails(_ref3) {
+@@ -1,11 +1,12 @@
+ import flatten from "flat"; // @ts-expect-error FIXME: Create TypeScript types for core-utils packages.
+-
++import calculateEmissions from "../../../../lib/components/util/calculated-carbon-emissions";
+ import coreUtils from "@opentripplanner/core-utils";
+ import React from "react";
+ import { FormattedMessage, FormattedNumber } from "react-intl";
+ import { CalendarAlt } from "@styled-icons/fa-solid/CalendarAlt";
+ import { HandPaper } from "@styled-icons/fa-solid/HandPaper";
+ import { Heartbeat } from "@styled-icons/fa-solid/Heartbeat";
++import { Leaf } from "@styled-icons/fa-solid/Leaf";
+ import { MoneyBillAlt } from "@styled-icons/fa-solid/MoneyBillAlt";
+ import { PhoneVolume } from "@styled-icons/fa-solid/PhoneVolume";
+ import { Route } from "@styled-icons/fa-solid/Route";
+@@ -46,11 +47,10 @@ function renderFare(currencyCode, fare) {
+     style: "currency"
+   });
+ }
++
+ /**
+  * Helper function to specify the link to dietary table.
+  */
+-
+-
+ function dietaryLink(contents) {
+   return /*#__PURE__*/React.createElement("a", {
+     href: "https://health.gov/dietaryguidelines/dga2005/document/html/chapter3.htm#table4",
+@@ -58,11 +58,17 @@ function dietaryLink(contents) {
+     target: "_blank"
+   }, contents);
+ }
++
++function carbonLink(contents) {
++  return /*#__PURE__*/React.createElement("a", {
++    href: "https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references",
++    rel: "noopener noreferrer",
++    target: "_blank"
++  }, contents);
++}
+ /**
+  * Helper function that assembles values for flex pickup/dropoff messages.
+  */
+-
+-
+ function getFlexMessageValues(info) {
+   var _info$contactInfo, _info$contactInfo2;
+ 
+@@ -77,8 +83,6 @@ function getFlexMessageValues(info) {
+  * Default rendering if no component is provided for the CaloriesDetails
+  * slot in the TripDetails component.
+  */
+-
+-
+ function DefaultCaloriesDetails(_ref) {
+   var bikeSeconds = _ref.bikeSeconds,
+       calories = _ref.calories,
+@@ -96,11 +100,28 @@ function DefaultCaloriesDetails(_ref) {
+     }
+   });
+ }
++
+ /**
+- * Helper component that renders a transit fare entry.
++ * Default rendering if no component is provided for the CaloriesDetails
++ * slot in the TripDetails component.
+  */
++function DefaultEmissionsDetails(_ref) {
++  var emissions = _ref.emissions;
++  return /*#__PURE__*/React.createElement(FormattedMessage, {
++    defaultMessage: defaultMessages["otpUi.TripDetails.emissionsDescription"],
++    description: "Text describing how the carbon emissions relate to the distance travelled on different modes of transit of a trip.",
++    id: "otpUi.TripDetails.emissionsDescription",
++    values: {
++      emissions: Math.round(emissions),
++      carbonLink: dietaryLink,
++      strong: boldText
++    }
++  });
++}
+ 
+-
++/**
++ * Helper component that renders a transit fare entry.
++ */
+ var TransitFare = function TransitFare(_ref2) {
+   var fareKey = _ref2.fareKey,
+       fareNameFallback = _ref2.fareNameFallback,
+@@ -118,14 +139,15 @@ var TransitFare = function TransitFare(_ref2) {
+     }
+   }));
+ };
++
+ /**
+  * Renders trip details such as departure instructions, fare amount, and calories spent.
+  */
+-
+-
+ export function TripDetails(_ref3) {
+   var _ref3$CaloriesDetails = _ref3.CaloriesDetails,
+       CaloriesDetails = _ref3$CaloriesDetails === void 0 ? DefaultCaloriesDetails : _ref3$CaloriesDetails,
++      _ref3$EmissionsDetails = _ref3.EmissionsDetails,
++      EmissionsDetails = _ref3$EmissionsDetails === void 0 ? DefaultEmissionsDetails : _ref3$EmissionsDetails,
+       _ref3$className = _ref3.className,
+       className = _ref3$className === void 0 ? "" : _ref3$className,
+       _ref3$DepartureDetail = _ref3.DepartureDetails,
+@@ -210,7 +232,7 @@ export function TripDetails(_ref3) {
+       caloriesBurned = _coreUtils$itinerary$.caloriesBurned,
+       walkDuration = _coreUtils$itinerary$.walkDuration; // Parse flex info and generate appropriate strings
+ 
+-
++  var carbonEmissions = calculateEmissions(itinerary);
+   var containsFlex = itinerary.legs.some(coreUtils.itinerary.isFlex);
+   var pickupBookingInfo = itinerary.legs.map(function (leg) {
+     return leg.pickupBookingInfo;
+@@ -245,20 +267,10 @@ export function TripDetails(_ref3) {
          strong: boldText
        }
      }))
@@ -25,6 +139,154 @@ index 0d5d48b..85a910d 100644
      }),
      summary: /*#__PURE__*/React.createElement(S.CaloriesSummary, null, /*#__PURE__*/React.createElement(FormattedMessage, {
        defaultMessage: defaultMessages["otpUi.TripDetails.calories"],
+@@ -274,6 +286,23 @@ export function TripDetails(_ref3) {
+       calories: caloriesBurned,
+       walkSeconds: walkDuration
+     })
++  }),carbonEmissions > 0 && /*#__PURE__*/React.createElement(TripDetail, {
++    icon: /*#__PURE__*/React.createElement(Leaf, {
++      size: 17,
++      color:'#11753b'
++    }),
++    summary: /*#__PURE__*/React.createElement(S.EmissionsSummary, null, /*#__PURE__*/React.createElement(FormattedMessage, {
++      defaultMessage: defaultMessages["otpUi.TripDetails.emissions"],
++      description: "Text describing how the carbon emissions relate to the distance travelled on different modes of transit of a trip.",
++      id: "otpUi.TripDetails.emissions",
++      values: {
++        emissions: carbonEmissions,
++        strong: boldText
++      }
++    })),
++    description: EmissionsDetails && /*#__PURE__*/React.createElement(EmissionsDetails, {
++      emissions: carbonEmissions
++    })
+   }), containsFlex && /*#__PURE__*/React.createElement(TripDetail, {
+     summary: /*#__PURE__*/React.createElement(S.FlexSummary, null, /*#__PURE__*/React.createElement(FormattedMessage, {
+       defaultMessage: defaultMessages["otpUi.TripDetails.tripIncludesFlex"],
+diff --git a/node_modules/@opentripplanner/trip-details/esm/styled.js b/node_modules/@opentripplanner/trip-details/esm/styled.js
+index 915f03c..0b5e5fa 100644
+--- a/node_modules/@opentripplanner/trip-details/esm/styled.js
++++ b/node_modules/@opentripplanner/trip-details/esm/styled.js
+@@ -11,78 +11,86 @@ export var CaloriesSummary = styled.span.withConfig({
+   displayName: "styled__CaloriesSummary",
+   componentId: "sc-6q2ok2-2"
+ })([""]);
++export var emissionsDescription = styled.span.withConfig({
++  displayName: "styled__EmissionsDescription",
++  componentId: "sc-6qok2-3"
++}) ([""]);
++export var EmissionsSummary = styled.span.withConfig({
++  displayName: "styled__EmissionsSummary",
++  componentId: "sc-6q2ok2-4"
++}) ([""]);
+ export var ExpandButton = styled(BaseButton).attrs({
+   "aria-label": "What does this mean?"
+ }).withConfig({
+   displayName: "styled__ExpandButton",
+-  componentId: "sc-6q2ok2-3"
++  componentId: "sc-6q2ok2-5"
+ })(["color:#00f;font-size:16px;margin-left:6px;margin-top:-2px;"]);
+ export var Fare = styled.span.withConfig({
+   displayName: "styled__Fare",
+-  componentId: "sc-6q2ok2-4"
++  componentId: "sc-6q2ok2-6"
+ })([""]);
+ export var HideButton = styled(BaseButton).withConfig({
+   displayName: "styled__HideButton",
+-  componentId: "sc-6q2ok2-5"
++  componentId: "sc-6q2ok2-7"
+ })(["float:right;"]);
+ export var TNCFare = styled.span.withConfig({
+   displayName: "styled__TNCFare",
+-  componentId: "sc-6q2ok2-6"
++  componentId: "sc-6q2ok2-8"
+ })([""]);
+ export var TNCFareCompanies = styled.span.withConfig({
+   displayName: "styled__TNCFareCompanies",
+-  componentId: "sc-6q2ok2-7"
++  componentId: "sc-6q2ok2-9"
+ })(["text-transform:capitalize;"]);
+ export var Timing = styled.span.withConfig({
+   displayName: "styled__Timing",
+-  componentId: "sc-6q2ok2-8"
++  componentId: "sc-6q2ok2-10"
+ })([""]);
+ export var TransitFare = styled.details.withConfig({
+   displayName: "styled__TransitFare",
+-  componentId: "sc-6q2ok2-9"
++  componentId: "sc-6q2ok2-11"
+ })(["display:inline-block;> span{display:block;padding-left:1.75ch;}"]);
+ export var TransitFareSingle = styled.span.withConfig({
+   displayName: "styled__TransitFareSingle",
+-  componentId: "sc-6q2ok2-10"
++  componentId: "sc-6q2ok2-12"
+ })([""]);
+ export var FlexSummary = styled.span.withConfig({
+   displayName: "styled__FlexSummary",
+-  componentId: "sc-6q2ok2-11"
++  componentId: "sc-6q2ok2-13"
+ })([""]);
+ export var FlexPickupSummary = styled.span.withConfig({
+   displayName: "styled__FlexPickupSummary",
+-  componentId: "sc-6q2ok2-12"
++  componentId: "sc-6q2ok2-14"
+ })([""]);
+ export var FlexDropOffSummary = styled.span.withConfig({
+   displayName: "styled__FlexDropOffSummary",
+-  componentId: "sc-6q2ok2-13"
++  componentId: "sc-6q2ok2-15"
+ })([""]);
+ export var TripDetail = styled.div.withConfig({
+   displayName: "styled__TripDetail",
+-  componentId: "sc-6q2ok2-14"
++  componentId: "sc-6q2ok2-16"
+ })(["margin-top:6px;"]);
+ export var TripDetailDescription = styled.div.withConfig({
+   displayName: "styled__TripDetailDescription",
+-  componentId: "sc-6q2ok2-15"
++  componentId: "sc-6q2ok2-17"
+ })(["background-color:#fff;border:1px solid #888;font-size:12px;margin-top:2px;padding:8px;"]);
+ export var TripDetailIcon = styled.div.withConfig({
+   displayName: "styled__TripDetailIcon",
+-  componentId: "sc-6q2ok2-16"
++  componentId: "sc-6q2ok2-18"
+ })(["float:left;font-size:17px;"]);
+ export var TripDetails = styled.div.withConfig({
+   displayName: "styled__TripDetails",
+-  componentId: "sc-6q2ok2-17"
++  componentId: "sc-6q2ok2-19"
+ })(["background-color:#eee;border-radius:6px;margin-bottom:15px;margin-top:16px;padding:10px 16px;"]);
+ export var TripDetailsBody = styled.div.withConfig({
+   displayName: "styled__TripDetailsBody",
+-  componentId: "sc-6q2ok2-18"
++  componentId: "sc-6q2ok2-20"
+ })([""]);
+ export var TripDetailsHeader = styled.div.withConfig({
+   displayName: "styled__TripDetailsHeader",
+-  componentId: "sc-6q2ok2-19"
++  componentId: "sc-6q2ok2-21"
+ })(["font-size:18px;font-weight:600;"]);
+ export var TripDetailSummary = styled.div.withConfig({
+   displayName: "styled__TripDetailSummary",
+-  componentId: "sc-6q2ok2-20"
++  componentId: "sc-6q2ok2-22"
+ })(["margin-left:28px;padding-top:2px;display:flex;align-items:baseline;"]);
+ //# sourceMappingURL=styled.js.map
+\ No newline at end of file
+diff --git a/node_modules/@opentripplanner/trip-details/i18n/en-US.yml b/node_modules/@opentripplanner/trip-details/i18n/en-US.yml
+index 6dd62a8..37f69bb 100644
+--- a/node_modules/@opentripplanner/trip-details/i18n/en-US.yml
++++ b/node_modules/@opentripplanner/trip-details/i18n/en-US.yml
+@@ -18,6 +18,9 @@ otpUi:
+       <strong>{walkMinutes, plural, one {# minute} other {# minutes}}</strong> spent walking and
+       <strong>{bikeMinutes, plural, one {# minute} other {# minutes}}</strong> spent biking during this trip.
+       Adapted from <dietaryLink>Dietary Guidelines for Americans 2005, page 16, Table 4</dietaryLink>."
++    emissions: "Carbon Emissions: <strong>{emissions, number, ::.}</strong>"
++    emissionsDescription: >
++      Carbon emissions is based on miles travelled using transit, walking, or biking during this trip. 
+     departure: "Depart <strong>{departureDate, date, long}</strong> at <strong>{departureDate, time, short}</strong>"
+     flexDropOffMessage: >
+       {hasLeadTime, select,
 diff --git a/node_modules/@opentripplanner/trip-details/lib/index.js b/node_modules/@opentripplanner/trip-details/lib/index.js
 index f32d598..b398252 100644
 --- a/node_modules/@opentripplanner/trip-details/lib/index.js
