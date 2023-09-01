@@ -10,6 +10,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
+require('dotenv').config()
 
 const findBackwardsCompatibleEnvVar = (varName) => {
   let value = null
@@ -81,7 +82,7 @@ module.exports = {
         loader.test = /\.(js|jsx|ts|tsx)$/
         loader.exclude = /node_modules/
       })
-
+      
       // Gather the CSS, HTML, YAML, and JS override files.
       const CUSTOM_CSS =
         (process.env && process.env.CUSTOM_CSS) ||

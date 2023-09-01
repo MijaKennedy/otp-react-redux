@@ -15,6 +15,9 @@ coverage
 # built example app
 dist
 
+#misc 
+.env
+
 # secrets. Ignore any versions of config.yml, except for example.
 *config.yml
 !example-config.yml

@@ -54,7 +54,7 @@ persistence:
   ### If no terms of storage page content is set, this removes an otherwise dead link
   ### False is default in that if the value isn't set, the link isn't shown
   # terms_of_storage: true
-
+  
 ### If using the OTP Middleware to store user profiles
 ### with Auth0 as the authentication mechanism,
 ### then use the otp_middleware strategy below instead:
@@ -62,7 +62,7 @@ persistence:
 #  enabled: true
 #  strategy: otp_middleware
 #  auth0:
-#    domain: your-auth0-domain
+#    domain: dev-ykbgf3g8ufkdbsz1
 #    clientId: your-auth0-client-id
 #  otp_middleware:
 #    apiBaseUrl: https://otp-middleware.example.com
@@ -105,6 +105,7 @@ map:
     - name: Stamen Toner Lite
       url: http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+  
   ### Optional transitive.js (route rendering) properties:
   ### - labeledModes: an array of OTP modes for which the route label should be
   ###                 rendered on the map. Example of OTP modes: BUS, RAIL, ...
@@ -136,7 +137,7 @@ map:
 
 # example config for a Pelias geocoder (https://pelias.io/)
 geocoder:
-  apiKey: AIzaSyDrkijyvAvcDHPdnvwH8LbzVNyP-5SUWDo
+  apiKey: test
   boundary:
     rect:
       minLon: -81.82
@@ -158,25 +159,6 @@ geocoder:
   # This allows the location field dropdown headers to be colored based on Pelias layer
   #resultsColors:
   #  stops: "#007fae"
-
-# example config for an ArcGIS geocoder
-# (https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm)
-# WARNING: using the ArcGIS geocoder with a persistence strategy of
-#   `localStorage` will result in an error being thrown because ArcGIS
-#   requires the use of a paid account to store geocode results.
-#   See https://developers.arcgis.com/rest/geocode/api-reference/geocoding-free-vs-paid.htm
-# geocoder:
-#   boundary:
-#     rect:
-#       minLon: -123.2034
-#       maxLon: -122.135
-#       minLat: 45.273
-#       maxLat: 45.7445
-#   focusPoint:
-#     lat: 45.5223452
-#     lon: -122.6821804
-#   # required geocoder type.
-#   type: ARCGIS
 
 # Use this mode config for the enhanced Transit+ config
 modes:
