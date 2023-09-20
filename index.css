@@ -116,7 +116,7 @@ input[type="text"]::-ms-clear {
 
 .menu-item:hover *,
 .app-menu li a span *:hover {
-  color: #4c97f5;
+  color: #79ada1;
 }
 
 .expand-menu-chevron {

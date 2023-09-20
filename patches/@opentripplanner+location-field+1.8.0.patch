@@ -1,0 +1,76 @@
+diff --git a/node_modules/@opentripplanner/location-field/esm/index.js b/node_modules/@opentripplanner/location-field/esm/index.js
+index 4cdc1e4..2ee130d 100644
+--- a/node_modules/@opentripplanner/location-field/esm/index.js
++++ b/node_modules/@opentripplanner/location-field/esm/index.js
+@@ -27,6 +27,8 @@ import { throttle } from "throttle-debounce";
+ import { GeocodedOptionIcon, Option, TransitStopOption, UserLocationIcon } from "./options";
+ import * as S from "./styled";
+ import { generateLabel, getCombinedLabel } from "./utils"; // FIXME have a better key generator for options
++import {Client} from "@googlemaps/google-maps-services-js";
++const client = new Client({});
+ 
+ var optionKey = 0;
+ 
+@@ -47,18 +49,52 @@ var LocationField = /*#__PURE__*/function (_Component) {
+ 
+   var _super = _createSuper(LocationField);
+   
++
+   function LocationField(props) {
+     var _this;
+ 
+     _classCallCheck(this, LocationField);
+ 
+     _this = _super.call(this, props);
+-    _this.geocodeAutocomplete = throttle(1000, function (text) {
++    _this.geocodeAutocomplete = throttle(1000, async function (text) {
+       if (!text) {
+         console.warn("No text entry provided for geocode autocomplete search.");
+         return;
+       }
+ 
++      client
++      .placeAutocomplete({
++        params: {
++          input: text,
++          key: 'AIzaSyBSzbVUDFzRK_qfonNyTaaDVwvL8aQEREg', 
++          radius: 50,
++        },
++        timeout: 1000, // milliseconds
++      })
++      .then((r) => {
++        console.log("result", r)
++        for (p in r.prediction) {
++          // client.geocode({
++          //   params: {
++          //     key: 'AIzaSyBSzbVUDFzRK_qfonNyTaaDVwvL8aQEREg', 
++          //     address: p.description
++          //   }
++          // })
++          // .then((result) => {
++
++          // })
++          // .catch((error) => {
++          //   console.warn(error)
++          // })
++        }
++        
++        
++      })
++      .catch((e) => {
++        console.warn(e)
++      })
++      
++      
+       var geocoderConfig = _this.props.geocoderConfig;
+       getGeocoder(geocoderConfig).autocomplete({
+         text: text
+@@ -67,6 +103,8 @@ var LocationField = /*#__PURE__*/function (_Component) {
+ 
+         var geocodedFeatures = result && result.features;
+ 
++        
++
+         if (!geocodedFeatures) {
+           // Get the Pelias error message if exists.
+           // TODO: determine how other geocoders return error messages.
