@@ -1,8 +1,25 @@
+# api:
+#   host: http://50.233.139.242:8080/otp/routers/default
+#   path: /otp/routers/default
+#   port: 
+#   # v2: true
+# branding: savvycommuter_logo
+# title: "Savvy Commuter"
+
+# api:
+#   host: http://10.2.0.221
+#   path: /otp/routers/default
+#   port: 8080/otp/routers/default
+#   v2: true
+# branding: savvycommuter_logo
+# title: "Savvy Commuter"
+
+
 api:
   host: https://api.u-ride.app
   path: /otp/routers/default
   port: 
-  v2: false 
+  # v2: true
 branding: savvycommuter_logo
 title: "Savvy Commuter"
 
@@ -11,6 +28,7 @@ title: "Savvy Commuter"
 #  host: http://localhost
 #  path: /otp/routers/default
 #  port: 8002
+
 
 # Add suggested locations to be shown as options in the form view.
 # locations:
