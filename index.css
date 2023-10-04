@@ -72,6 +72,11 @@ input[type="text"]::-ms-clear {
   margin: 52px auto 0 0;
 }
 
+.active.btn.bt-xs.btn-link {
+  background-color: #004644; /* Change to your desired color */
+  color: #ffffff;
+}
+
 .slide-pane__header,
 .slide-pane__close {
   display: none;
