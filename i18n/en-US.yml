@@ -608,7 +608,7 @@ components:
     storageDisclaimer: >
       Any preferences, places, or settings you opt 
       to save will be stored in the local storage of your browser. 
-      TriMet will not have access to knowledge about your home, work, 
+      Savvy Commuter will not have access to knowledge about your home, work, 
       or any other location. At any point you can opt to turn off 
       remembering recent places/searches and clear your saved home/work locations and favorite stops.
   UserTripSettings:
@@ -641,6 +641,9 @@ otpUi:
       <strong>{walkMinutes, plural, one {# minute} other {# minutes}}</strong> spent walking and
       <strong>{bikeMinutes, plural, one {# minute} other {# minutes}}</strong> spent biking during this trip.
       Adapted from <dietaryLink>Dietary Guidelines for Americans 2005, page 16, Table 4</dietaryLink>.
+    emissions: "Carbon Emissions: <strong>{emissions, number, ::.}</strong>"
+    emissionsDescription: >
+      Carbon emissions is based on miles travelled using transit, walking, or biking during this trip. 
     departure: Depart <strong>{departureDate, date, long}</strong> at <strong>{departureDate, time, short}</strong>
     flexDropOffMessage: >
       {hasLeadTime, select,
@@ -662,7 +665,7 @@ otpUi:
     title: Trip Details
     tncFare: "{companies} Fare: <strong>{minTNCFare} - {maxTNCFare}</strong>"
     transitFare: Transit Fare
-    transitFareEntry: "{name}: <strong>{value}</strong>"
+    transitFareEntry: "{name}: <strong>USD</strong>"
     tripIncludesFlex: This trip includes flexible routes.
 
 # Common messages that appear in multiple components and modules
@@ -717,6 +720,7 @@ common:
   # Shared itinerary description messages
   itineraryDescriptions:
     calories: "{calories, number} Cal"
+    emissions: "{emissions, number} lbs CO2"
     noItineraryToDisplay: No itinerary to display.
     transfers: "{transfers, plural, =0 {} one {# transfer} other {# transfers}}"
 

@@ -139,10 +139,10 @@ geocoder:
   apiKey: ge-8e09318a28913570
   boundary:
     rect:
-      minLon: -123.2034
-      maxLon: -122.135
-      minLat: 45.273
-      maxLat: 45.7445
+      minLon: -81.81
+      maxLon: -80
+      minLat: 24.54
+      maxLat: 27
   focusPoint:
     lat: 26.31
     lon: -80.05
