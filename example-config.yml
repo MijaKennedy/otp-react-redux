@@ -93,8 +93,8 @@ persistence:
 #        href: ''
 
 map:
-  initLat: 45.52
-  initLon: -122.682
+  initLat: 26.31
+  initLon: -80.05
   baseLayers:
     - name: Streets
       url: //cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png
@@ -144,8 +144,8 @@ geocoder:
       minLat: 45.273
       maxLat: 45.7445
   focusPoint:
-    lat: 45.5223452
-    lon: -122.6821804
+    lat: 26.31
+    lon: -80.05
   # Custom fetch options to pass to geocoder resource.
   # options:
   #   headers:
