@@ -136,7 +136,7 @@ map:
 
 # example config for a Pelias geocoder (https://pelias.io/)
 geocoder:
-  apiKey: MAPZEN_KEY
+  apiKey: ge-8e09318a28913570
   boundary:
     rect:
       minLon: -123.2034
@@ -154,7 +154,7 @@ geocoder:
   type: PELIAS
   # This base URL is required as the libraries will default to using now-defunct
   # mapzen urls
-  baseUrl: https://geocoder.example.com/pelias/v1
+  baseUrl: https://api.geocode.earth/v1/
   # This allows the location field dropdown headers to be colored based on Pelias layer
   #resultsColors:
   #  stops: "#007fae"
