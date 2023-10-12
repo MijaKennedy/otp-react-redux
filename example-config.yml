@@ -1,7 +1,10 @@
 api:
-  host: http://localhost
+  host: https://api.u-ride.app
   path: /otp/routers/default
-  port: 8001
+  port: 
+  # v2: true
+branding: savvycommuter_logo
+title: "Savvy Commuter"
 
 # Support OTP-2 in parallel for certain requests
 # api_v2:
